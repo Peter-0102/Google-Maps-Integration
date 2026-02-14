@@ -6,12 +6,13 @@ class MapsScreen extends StatefulWidget {
   final List<Tienda> tiendas;
   final void Function(GoogleMapController) onMapCreated;
   final void Function(Tienda) onMarkerTap;
+  final VoidCallback? onMapTouch;
 
   const MapsScreen({
     super.key,
     required this.tiendas,
     required this.onMapCreated,
-    required this.onMarkerTap,
+    required this.onMarkerTap, this.onMapTouch,
   });
 
   @override
@@ -19,7 +20,6 @@ class MapsScreen extends StatefulWidget {
 }
 
 class _MapsScreenState extends State<MapsScreen> {
-
   Set<Marker> get crearMarcadores {
     return widget.tiendas.map((t) {
       return Marker(
@@ -41,6 +41,9 @@ class _MapsScreenState extends State<MapsScreen> {
         target: LatLng(19.4326, -99.1332),
         zoom: 13,
       ),
+      onCameraMoveStarted: () {
+        widget.onMapTouch?.call();
+      },
       markers: crearMarcadores,
     );
   }
