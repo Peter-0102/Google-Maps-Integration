@@ -267,17 +267,63 @@ AnimatedContainer(
                                 const Icon(Icons.store,
                                     color: Colors.blueAccent),
                                 const SizedBox(width: 12),
-                                Expanded(
-                                  child: Text(
-                                    tienda.nombre,
-                                    style: const TextStyle(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.w600,
+                                
+
+                        // Info
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                tienda.nombre,
+                                style: const TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                              const SizedBox(height: 4),
+
+                              Row(
+                                children: [
+                                  const Icon(Icons.star,
+                                      size: 16, color: Colors.amber),
+                                  const SizedBox(width: 4),
+                                  Text(
+                                    tienda.rating.toString(),
+                                    style: const TextStyle(fontSize: 13),
+                                  ),
+                                ],
+                              ),
+
+                              const SizedBox(height: 4),
+
+                              Row(
+                                children: const [
+                                  Icon(Icons.location_on,
+                                      size: 14, color: Colors.redAccent),
+                                  SizedBox(width: 4),
+                                  Expanded(
+                                    child: Text(
+                                      "Ver ubicación en el mapa",
+                                      style: TextStyle(
+                                        fontSize: 12,
+                                        color: Colors.black54,
+                                      ),
+                                      overflow: TextOverflow.ellipsis,
                                     ),
                                   ),
-                                ),
+                                ],
+                              ),
+                            ],
+                          ),
+                        ),
                                 const Icon(Icons.chevron_right,
                                     color: Colors.black38),
+
+
+
+
+
                               ],
                             ),
                           ),
