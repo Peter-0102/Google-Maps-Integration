@@ -139,7 +139,7 @@ class _HomeScreenState extends State<HomeScreen> {
     return Column(
       children: [
         Expanded(
-          flex: 1,
+          flex: 2,
           child: Stack(
             children: [
               MapsScreen(
@@ -186,68 +186,116 @@ class _HomeScreenState extends State<HomeScreen> {
             ],
           ),
         ),
-        Expanded(
-          flex: 1,
-          child: Container(
-            color: Colors.amberAccent,
-            padding: const EdgeInsets.all(20),
-            child: tiendaSeleccionada != null
-                ? Card(
-                    elevation: 5,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.all(16),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            tiendaSeleccionada!.nombre,
-                            style: const TextStyle(
-                              fontSize: 20,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                          const SizedBox(height: 10),
-                          Text("Latitud: ${tiendaSeleccionada!.lat}"),
-                          Text("Longitud: ${tiendaSeleccionada!.lng}"),
-                          const Spacer(),
-                          Align(
-                            alignment: Alignment.bottomRight,
-                            child: TextButton(
-                              onPressed: () {
-                                setState(() {
-                                  tiendaSeleccionada = null;
-                                });
-                              },
-                              child: const Text("Cerrar"),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  )
-                : ListView.builder(
-                    itemCount: resultado.length,
-                    itemBuilder: (context, index) {
-                      final tienda = resultado[index];
-                      return InkWell(
-                        onTap: () => enfocarTienda(tienda),
-                        child: Container(
-                          margin: const EdgeInsets.only(bottom: 10),
-                          padding: const EdgeInsets.all(15),
+Expanded(
+  flex: 1,
+  child: Container(
+    decoration: const BoxDecoration(
+      color: Color(0xFFF5F5F5),
+      borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+    ),
+    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+    child: resultado.isEmpty
+        ? const Center(
+            child: Text(
+              "No hay resultados",
+              style: TextStyle(color: Colors.black54),
+            ),
+          )
+        : ListView.separated(
+            itemCount: resultado.length,
+            separatorBuilder: (_, __) => const SizedBox(height: 10),
+            itemBuilder: (context, index) {
+              final tienda = resultado[index];
+
+              return Material(
+                color: Colors.white,
+                elevation: 3,
+                borderRadius: BorderRadius.circular(14),
+                child: InkWell(
+                  borderRadius: BorderRadius.circular(14),
+                  onTap: () => enfocarTienda(tienda),
+                  onLongPress: () => onTiendaSeleccionada(tienda),
+                  child: Padding(
+                    padding: const EdgeInsets.all(14),
+                    child: Row(
+                      children: [
+                        // Icono
+                        Container(
+                          width: 45,
+                          height: 45,
                           decoration: BoxDecoration(
-                            color: Colors.white,
+                            color: Colors.blueAccent.withOpacity(0.15),
                             borderRadius: BorderRadius.circular(10),
                           ),
-                          child: Text(tienda.nombre),
+                          child: const Icon(
+                            Icons.store,
+                            color: Colors.blueAccent,
+                          ),
                         ),
-                      );
-                    },
+
+                        const SizedBox(width: 12),
+
+                        // Info
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                tienda.nombre,
+                                style: const TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                              const SizedBox(height: 4),
+
+                              Row(
+                                children: [
+                                  const Icon(Icons.star,
+                                      size: 16, color: Colors.amber),
+                                  const SizedBox(width: 4),
+                                  Text(
+                                    tienda.rating.toString(),
+                                    style: const TextStyle(fontSize: 13),
+                                  ),
+                                ],
+                              ),
+
+                              const SizedBox(height: 4),
+
+                              Row(
+                                children: const [
+                                  Icon(Icons.location_on,
+                                      size: 14, color: Colors.redAccent),
+                                  SizedBox(width: 4),
+                                  Expanded(
+                                    child: Text(
+                                      "Ver ubicación en el mapa",
+                                      style: TextStyle(
+                                        fontSize: 12,
+                                        color: Colors.black54,
+                                      ),
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                        ),
+
+                        const Icon(Icons.chevron_right,
+                            color: Colors.black38),
+                      ],
+                    ),
                   ),
+                ),
+              );
+            },
           ),
-        ),
+  ),
+),
+
       ],
     );
   }
