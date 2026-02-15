@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:google_maps/screens/home.dart';
 
+import 'package:google_maps/screens/wolcome_screen.dart';
 
 void main() {
   runApp(const MainApp());
@@ -12,11 +12,8 @@ class MainApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const MaterialApp(
-      home: Scaffold(
-        body: Center(
-          child: HomeScreen(),
-        ),
-      ),
+      debugShowCheckedModeBanner: false,
+      home: WelcomeScreen(),
     );
   }
 }

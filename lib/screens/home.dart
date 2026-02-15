@@ -15,10 +15,9 @@ class _HomeScreenState extends State<HomeScreen> {
   List<Tienda> resultado = [];
   bool _panelVisible = true;
 
-
   GoogleMapController? _mapController;
   Tienda? tiendaSeleccionada;
-  
+
   final List<Tienda> misTiendas = [
     Tienda("Tienda A", 19.4326, -99.1332),
     Tienda("Tienda B", 19.4400, -99.1400),
@@ -138,207 +137,215 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Expanded(
-          flex: 2,
-          child: Stack(
-            children: [
-             MapsScreen(
-  tiendas: resultado.isEmpty ? misTiendas : resultado,
-  onMapCreated: (controller) {
-    _mapController = controller;
-  },
-  onMarkerTap: onTiendaSeleccionada,
-  onMapTouch: () {
-    setState(() {
-      _panelVisible = false;
-    });
-  
-  },
-),
+    return Scaffold(
+      body: Column(
+        children: [
+          Expanded(
+            flex: 2,
+            child: Stack(
+              children: [
+                MapsScreen(
+                  tiendas: resultado.isEmpty ? misTiendas : resultado,
+                  onMapCreated: (controller) {
+                    _mapController = controller;
+                  },
+                  onMarkerTap: onTiendaSeleccionada,
+                  onMapTouch: () {
+                    setState(() {
+                      _panelVisible = false;
+                    });
+                  },
+                ),
 
-
-              Padding(
-                padding: const EdgeInsets.all(50),
-                child: Container(
-                  height: 50,
-                  width: 500,
-                  decoration: BoxDecoration(
-                    color: Colors.black87,
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  child: Row(
-                    children: [
-                      Expanded(
-                        child: Padding(
-                          padding: const EdgeInsets.only(left: 16),
-                          child: TextField(
-                            controller: _searchController,
-                            style: const TextStyle(color: Colors.white),
-                            decoration: const InputDecoration(
-                              hintText: 'Buscar tienda...',
-                              hintStyle: TextStyle(color: Colors.white54),
-                              border: InputBorder.none,
+                Padding(
+                  padding: const EdgeInsets.all(50),
+                  child: Container(
+                    height: 50,
+                    width: 500,
+                    decoration: BoxDecoration(
+                      color: Colors.black87,
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: Padding(
+                            padding: const EdgeInsets.only(left: 16),
+                            child: TextField(
+                              controller: _searchController,
+                              style: const TextStyle(color: Colors.white),
+                              decoration: const InputDecoration(
+                                hintText: 'Buscar tienda...',
+                                hintStyle: TextStyle(color: Colors.white54),
+                                border: InputBorder.none,
+                              ),
                             ),
                           ),
                         ),
-                      ),
-                      IconButton(
-                        icon: const Icon(Icons.search, color: Colors.white),
-                        onPressed: buscarLocal,
-                      ),
-                    ],
+                        IconButton(
+                          icon: const Icon(Icons.search, color: Colors.white),
+                          onPressed: buscarLocal,
+                        ),
+                      ],
+                    ),
                   ),
                 ),
-              ),
-            ],
-          ),
-        ),
-AnimatedContainer(
-  duration: const Duration(milliseconds: 250),
-  height: _panelVisible ? 220 : 50,
-  width: double.infinity,
-  curve: Curves.easeInOut,
-  decoration: const BoxDecoration(
-    color: Color(0xFFF5F5F5),
-    borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-    boxShadow: [
-      BoxShadow(
-        color: Colors.black26,
-        blurRadius: 6,
-        offset: Offset(0, -2),
-      ),
-    ],
-  ),
-  child: Column(
-    children: [
-      // 🔘 DRAG HANDLE
-      GestureDetector(
-        onTap: () {
-          setState(() {
-            _panelVisible = !_panelVisible;
-          });
-
-          
-        },
-        child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 8),
-          child: Container(
-            width: 80,
-            height: 10,
-            decoration: BoxDecoration(
-              color: Colors.grey[400],
-              borderRadius: BorderRadius.circular(10),
+              ],
             ),
           ),
-        ),
-      ),
-
-      Expanded(
-        child: _panelVisible
-            ? (resultado.isEmpty
-                ? const Center(
-                    child: Text(
-                      "No hay resultados",
-                      style: TextStyle(color: Colors.black54),
+          AnimatedContainer(
+            duration: const Duration(milliseconds: 250),
+            height: _panelVisible ? 220 : 50,
+            width: double.infinity,
+            curve: Curves.easeInOut,
+            decoration: const BoxDecoration(
+              color: Color(0xFFF5F5F5),
+              borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black26,
+                  blurRadius: 6,
+                  offset: Offset(0, -2),
+                ),
+              ],
+            ),
+            child: Column(
+              children: [
+                GestureDetector(
+                  onTap: () {
+                    setState(() {
+                      _panelVisible = !_panelVisible;
+                    });
+                  },
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 8),
+                    child: Container(
+                      width: 80,
+                      height: 10,
+                      decoration: BoxDecoration(
+                        color: Colors.grey[400],
+                        borderRadius: BorderRadius.circular(10),
+                      ),
                     ),
-                  )
-                : ListView.separated(
-                    padding: const EdgeInsets.symmetric(horizontal: 12),
-                    itemCount: resultado.length,
-                    separatorBuilder: (_, _) =>
-                        const SizedBox(height: 10),
-                    itemBuilder: (context, index) {
-                      final tienda = resultado[index];
+                  ),
+                ),
 
-                      return Material(
-                        elevation: 3,
-                        borderRadius: BorderRadius.circular(14),
-                        child: InkWell(
-                          borderRadius: BorderRadius.circular(14),
-                          onTap: () => enfocarTienda(tienda),
-                          onLongPress: () =>
-                              onTiendaSeleccionada(tienda),
-                          child: Padding(
-                            padding: const EdgeInsets.all(14),
-                            child: Row(
-                              children: [
-                                const Icon(Icons.store,
-                                    color: Colors.blueAccent),
-                                const SizedBox(width: 12),
-                                
-
-                        // Info
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                tienda.nombre,
-                                style: const TextStyle(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w600,
+                Expanded(
+                  child: _panelVisible
+                      ? (resultado.isEmpty
+                            ? const Center(
+                                child: Text(
+                                  "No hay resultados",
+                                  style: TextStyle(color: Colors.black54),
                                 ),
-                              ),
-                              const SizedBox(height: 4),
+                              )
+                            : ListView.separated(
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 12,
+                                ),
+                                itemCount: resultado.length,
+                                separatorBuilder: (_, _) =>
+                                    const SizedBox(height: 10),
+                                itemBuilder: (context, index) {
+                                  final tienda = resultado[index];
 
-                              Row(
-                                children: [
-                                  const Icon(Icons.star,
-                                      size: 16, color: Colors.amber),
-                                  const SizedBox(width: 4),
-                                  Text(
-                                    tienda.rating.toString(),
-                                    style: const TextStyle(fontSize: 13),
-                                  ),
-                                ],
-                              ),
+                                  return Material(
+                                    elevation: 3,
+                                    borderRadius: BorderRadius.circular(14),
+                                    child: InkWell(
+                                      borderRadius: BorderRadius.circular(14),
+                                      onTap: () => enfocarTienda(tienda),
+                                      onLongPress: () =>
+                                          onTiendaSeleccionada(tienda),
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(14),
+                                        child: Row(
+                                          children: [
+                                            const Icon(
+                                              Icons.store,
+                                              color: Colors.blueAccent,
+                                            ),
+                                            const SizedBox(width: 12),
 
-                              const SizedBox(height: 4),
+                                            // Info
+                                            Expanded(
+                                              child: Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                children: [
+                                                  Text(
+                                                    tienda.nombre,
+                                                    style: const TextStyle(
+                                                      fontSize: 16,
+                                                      fontWeight:
+                                                          FontWeight.w600,
+                                                    ),
+                                                  ),
+                                                  const SizedBox(height: 4),
 
-                              Row(
-                                children: const [
-                                  Icon(Icons.location_on,
-                                      size: 14, color: Colors.redAccent),
-                                  SizedBox(width: 4),
-                                  Expanded(
-                                    child: Text(
-                                      "Ver ubicación en el mapa",
-                                      style: TextStyle(
-                                        fontSize: 12,
-                                        color: Colors.black54,
+                                                  Row(
+                                                    children: [
+                                                      const Icon(
+                                                        Icons.star,
+                                                        size: 16,
+                                                        color: Colors.amber,
+                                                      ),
+                                                      const SizedBox(width: 4),
+                                                      Text(
+                                                        tienda.rating
+                                                            .toString(),
+                                                        style: const TextStyle(
+                                                          fontSize: 13,
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  ),
+
+                                                  const SizedBox(height: 4),
+
+                                                  Row(
+                                                    children: const [
+                                                      Icon(
+                                                        Icons.location_on,
+                                                        size: 14,
+                                                        color: Colors.redAccent,
+                                                      ),
+                                                      SizedBox(width: 4),
+                                                      Expanded(
+                                                        child: Text(
+                                                          "Ver ubicación en el mapa",
+                                                          style: TextStyle(
+                                                            fontSize: 12,
+                                                            color:
+                                                                Colors.black54,
+                                                          ),
+                                                          overflow: TextOverflow
+                                                              .ellipsis,
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                            const Icon(
+                                              Icons.chevron_right,
+                                              color: Colors.black38,
+                                            ),
+                                          ],
+                                        ),
                                       ),
-                                      overflow: TextOverflow.ellipsis,
                                     ),
-                                  ),
-                                ],
-                              ),
-                            ],
-                          ),
-                        ),
-                                const Icon(Icons.chevron_right,
-                                    color: Colors.black38),
-
-
-
-
-
-                              ],
-                            ),
-                          ),
-                        ),
-                      );
-                    },
-                  ))
-            : const SizedBox(),
+                                  );
+                                },
+                              ))
+                      : const SizedBox(),
+                ),
+              ],
+            ),
+          ),
+        ],
       ),
-    ],
-  ),
-),
-
-
-      ],
     );
   }
 }
