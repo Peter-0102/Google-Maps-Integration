@@ -18,6 +18,14 @@ class _HomeScreenState extends State<HomeScreen> {
   GoogleMapController? _mapController;
   Tienda? tiendaSeleccionada;
 
+  //Variables para agregar un nueva tienda:
+  final _nombreCtrl = TextEditingController();
+  final _latCtrl = TextEditingController();
+  final _lngCtrl = TextEditingController();
+  final _ratingCtrl = TextEditingController();
+  final _horarioCtrl = TextEditingController();
+  final _direccionCtrl = TextEditingController();
+
   final List<Tienda> misTiendas = [
     Tienda("Tienda A", 19.4326, -99.1332),
     Tienda("Tienda B", 19.4400, -99.1400),
@@ -28,6 +36,123 @@ class _HomeScreenState extends State<HomeScreen> {
     Tienda("Tienda G", 69.4400, -150.1400),
     Tienda("Tienda H", 79.4400, -160.1400),
   ];
+
+  //Modal para crear una nueva tienda:
+  void mostrarModalCrearTienda() {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      ),
+      builder: (_) {
+        return Padding(
+          padding: EdgeInsets.only(
+            left: 20,
+            right: 20,
+            top: 20,
+            bottom: MediaQuery.of(context).viewInsets.bottom + 20,
+          ),
+          child: SingleChildScrollView(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                const Text(
+                  "Nueva tienda",
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                ),
+                const SizedBox(height: 15),
+
+                TextField(
+                  controller: _nombreCtrl,
+                  decoration: const InputDecoration(labelText: "Nombre"),
+                ),
+
+                TextField(
+                  controller: _latCtrl,
+                  keyboardType: TextInputType.number,
+                  decoration: const InputDecoration(labelText: "Latitud"),
+                ),
+
+                TextField(
+                  controller: _lngCtrl,
+                  keyboardType: TextInputType.number,
+                  decoration: const InputDecoration(labelText: "Longitud"),
+                ),
+
+                TextField(
+                  controller: _ratingCtrl,
+                  keyboardType: TextInputType.number,
+                  decoration: const InputDecoration(labelText: "Rating"),
+                ),
+
+                TextField(
+                  controller: _horarioCtrl,
+                  decoration: const InputDecoration(labelText: "Horario"),
+                ),
+
+                TextField(
+                  controller: _direccionCtrl,
+                  decoration: const InputDecoration(labelText: "Dirección"),
+                ),
+
+                const SizedBox(height: 20),
+
+                SizedBox(
+                  width: double.infinity,
+                  child: ElevatedButton(
+                    onPressed: guardarTienda,
+                    child: const Text("Guardar"),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  //Funcion para guardar tienda:
+  void guardarTienda() {
+    final nombre = _nombreCtrl.text.trim();
+    final lat = double.tryParse(_latCtrl.text);
+    final lng = double.tryParse(_lngCtrl.text);
+
+    if (nombre.isEmpty || lat == null || lng == null) {
+      return; // puedes mostrar un SnackBar luego
+    }
+
+    final tienda = Tienda(
+      nombre,
+      lat,
+      lng,
+      rating: double.tryParse(_ratingCtrl.text) ?? 4.5,
+      horario: _horarioCtrl.text.isEmpty
+          ? "9:00 AM - 9:00 PM"
+          : _horarioCtrl.text,
+      direccion: _direccionCtrl.text.isEmpty
+          ? "Dirección no disponible"
+          : _direccionCtrl.text,
+    );
+
+    setState(() {
+      misTiendas.add(tienda);
+      resultado = misTiendas;
+    });
+
+    _limpiarFormulario();
+    Navigator.pop(context);
+  }
+
+  void _limpiarFormulario() {
+    _nombreCtrl.clear();
+    _latCtrl.clear();
+    _lngCtrl.clear();
+    _ratingCtrl.clear();
+    _horarioCtrl.clear();
+    _direccionCtrl.clear();
+  }
 
   List<Tienda> buscarTiendasSimilares(String query, List<Tienda> tiendas) {
     final q = query.toLowerCase().trim();
@@ -138,6 +263,11 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      floatingActionButton: FloatingActionButton(
+        onPressed: mostrarModalCrearTienda,
+        child: const Icon(Icons.add_location_alt),
+      ),
+
       body: Column(
         children: [
           Expanded(
