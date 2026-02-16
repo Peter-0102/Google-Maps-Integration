@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_maps/models/tienda.dart';
 import 'package:google_maps/widgets/map.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:geolocator/geolocator.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -25,6 +26,11 @@ class _HomeScreenState extends State<HomeScreen> {
   final _ratingCtrl = TextEditingController();
   final _horarioCtrl = TextEditingController();
   final _direccionCtrl = TextEditingController();
+
+
+  LatLng? miUbicacion;
+  Marker? marcadorTemporal;
+
 
 final List<Tienda> misTiendas = [
   // --- ABARROTES Y COMIDA ---
@@ -51,6 +57,74 @@ final List<Tienda> misTiendas = [
   Tienda("Relojería 'El Tiempo Antiguo'", 19.4305, -99.1345),
   Tienda("Librería 'Páginas Sueltas'", 19.4372, -99.1435),
 ];
+
+//Mi ubicacion actual
+
+Future<void> marcarMiUbicacion() async {
+  final ubicacion = await obtenerUbicacionActual();
+  if (ubicacion == null) return;
+
+  setState(() {
+    miUbicacion = ubicacion;
+  });
+
+  // Opcional: mover la cámara al usuario
+  _mapController?.animateCamera(
+    CameraUpdate.newLatLngZoom(ubicacion, 15),
+  );
+}
+
+void _crearMarcadorTemporal(LatLng position) {
+  final ahora = TimeOfDay.now();
+  final hora = '${ahora.hour.toString().padLeft(2, '0')}:${ahora.minute.toString().padLeft(2, '0')}';
+
+  setState(() {
+    marcadorTemporal = Marker(
+      markerId: const MarkerId('temporal'),
+      position: position,
+      infoWindow: InfoWindow(
+        title: 'Marcador temporal',
+        snippet: 'Hora: $hora',
+      ),
+      icon: BitmapDescriptor.defaultMarkerWithHue(
+        BitmapDescriptor.hueAzure,
+      ),
+    );
+  });
+}
+
+
+Future<LatLng?> obtenerUbicacionActual() async {
+  bool serviceEnabled;
+  LocationPermission permission;
+
+  // 1️⃣ Verificar si el GPS está activo
+  serviceEnabled = await Geolocator.isLocationServiceEnabled();
+  if (!serviceEnabled) {
+    return null;
+  }
+
+  // 2️⃣ Verificar permisos
+  permission = await Geolocator.checkPermission();
+  if (permission == LocationPermission.denied) {
+    permission = await Geolocator.requestPermission();
+    if (permission == LocationPermission.denied) {
+      return null;
+    }
+  }
+
+  if (permission == LocationPermission.deniedForever) {
+    return null;
+  }
+
+  // 3️⃣ Obtener posición
+  final position = await Geolocator.getCurrentPosition(
+    desiredAccuracy: LocationAccuracy.high,
+  );
+
+  return LatLng(position.latitude, position.longitude);
+}
+
 
   //Modal para crear una nueva tienda:
   void mostrarModalCrearTienda() {
@@ -278,9 +352,21 @@ final List<Tienda> misTiendas = [
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      floatingActionButton: FloatingActionButton(
+      floatingActionButton: Column(
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: [
+          FloatingActionButton(
         onPressed: mostrarModalCrearTienda,
         child: const Icon(Icons.add_location_alt),
+      ),
+       SizedBox(height: 16),
+       FloatingActionButton(
+  heroTag: "ubicacion",
+  onPressed: marcarMiUbicacion,
+  child: const Icon(Icons.my_location),
+),
+
+        ],
       ),
 
       body: Column(
@@ -300,6 +386,7 @@ final List<Tienda> misTiendas = [
                       _panelVisible = false;
                     });
                   },
+                  onMapTap: _crearMarcadorTemporal,
                 ),
 
                 Padding(
