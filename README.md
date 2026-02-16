@@ -1,113 +1,101 @@
-Buscador de Tiendas con Google Maps – Flutter App
 
-Aplicación móvil desarrollada en Flutter que permite buscar tiendas por categoría dentro de una ciudad y mostrarlas directamente en un mapa interactivo.
-La app utiliza Google Maps para la visualización y geolocalización en tiempo real para mejorar los resultados según la ubicación del usuario.
+# Buscador de Tiendas con Google Maps – Flutter App
+
+Aplicación móvil desarrollada en **Flutter** que permite buscar **tiendas por categoría dentro de una ciudad** y mostrarlas directamente en un mapa interactivo.  
+La app utiliza **Google Maps** para la visualización y **geolocalización en tiempo real** para mejorar los resultados según la ubicación del usuario.
 
 Este proyecto forma parte de mi portafolio y está pensado para demostrar el uso de mapas, ubicación, manejo de estado y una arquitectura clara en Flutter.
 
-Qué hace la aplicación
-Pantalla de bienvenida
+---
 
-La app cuenta con una pantalla de bienvenida que introduce al usuario antes de acceder a la pantalla principal.
+## Funcionalidades principales
 
-Búsqueda de tiendas
+### Pantalla de bienvenida
+La aplicación cuenta con una pantalla de bienvenida antes de acceder a la pantalla principal.
 
-El usuario puede buscar tiendas por tipo o categoría.
-Por ejemplo, si busca “abarrotes”, la app mostrará todas las tiendas relacionadas con esa categoría dentro de la ciudad.
+### Búsqueda de tiendas
+El usuario puede buscar tiendas por nombre o categoría.  
+Por ejemplo, al buscar **"abarrotes"**, la app mostrará todas las tiendas relacionadas con ese término.
 
-Mapa interactivo
+### Mapa interactivo
+- Visualización de tiendas mediante marcadores.
+- Marcadores generados dinámicamente.
+- Interacción directa con cada tienda desde el mapa.
 
-Las tiendas se muestran como marcadores en el mapa.
+### Ubicación actual del usuario
+- Obtención de la ubicación en tiempo real.
+- Posibilidad de centrar el mapa en la ubicación del usuario.
+- Base para implementar búsquedas por cercanía.
 
-Cada marcador representa una tienda con su ubicación.
+### Marcadores dinámicos
+- Los marcadores se crean a partir de una lista de tiendas.
+- Se pueden agregar nuevas tiendas manualmente.
+- Interacción entre lista de resultados y mapa.
 
-Al tocar un marcador, se puede interactuar con la tienda seleccionada.
+---
 
-Ubicación actual del usuario
+## Arquitectura del proyecto
 
-La app obtiene la ubicación en tiempo real del usuario.
+El proyecto está organizado separando responsabilidades para mantener el código limpio y escalable.
 
-El mapa puede centrarse automáticamente en esa ubicación.
+### Estructura general
+- **home.dart**
+  - Maneja el estado principal de la aplicación.
+  - Controla la búsqueda de tiendas.
+  - Gestiona la lista de resultados y la interacción con el mapa.
 
-Esto permite trabajar posteriormente con búsquedas por cercanía.
+- **map.dart (MapsScreen)**
+  - Se encarga exclusivamente de mostrar el mapa.
+  - Recibe datos y callbacks desde `home.dart`.
+  - No contiene lógica de negocio.
 
-Marcadores dinámicos
+---
 
-Los marcadores se generan dinámicamente a partir de una lista de tiendas.
+## Modelo de datos
 
-Se pueden agregar nuevos marcadores desde la lógica principal de la app.
+Las tiendas se representan mediante un modelo que incluye:
 
-También se manejan marcadores temporales creados al tocar el mapa.
+- Nombre
+- Latitud
+- Longitud
+- Rating
+- Horario
+- Dirección
 
-Arquitectura y decisiones técnicas
+---
 
-El proyecto está organizado separando responsabilidades para mantener el código claro y escalable:
+## Tecnologías y herramientas
 
-home.dart
+- Flutter  
+- Google Maps API  
+- Geolocator  
+- Dart  
 
-Maneja el estado principal.
+---
 
-Controla los marcadores.
+## Qué demuestra este proyecto
 
-Gestiona la lógica de interacción y eventos.
+- Integración de APIs externas en Flutter.
+- Uso de mapas interactivos y geolocalización.
+- Manejo de estado y comunicación entre widgets.
+- Separación clara entre UI y lógica.
+- Enfoque en experiencia de usuario.
 
-map.dart (MapsScreen)
+---
 
-Se encarga únicamente de mostrar el mapa.
+## Posibles mejoras futuras
 
-Recibe datos y callbacks desde home.dart.
+- Búsqueda de tiendas por distancia.
+- Filtros avanzados por categoría.
+- Guardar tiendas favoritas.
+- Mostrar rutas desde la ubicación del usuario.
+- Persistencia de datos con base de datos local o remota.
 
-No contiene lógica de negocio.
+---
 
-Este enfoque facilita:
+## Autor
 
-El mantenimiento del código
+**Pedro Cruz López**  
+Estudiante de Ingeniería en Computación  
 
-La reutilización de componentes
-
-La escalabilidad del proyecto
-
-Tecnologías y herramientas utilizadas
-
-Flutter
-Framework principal para el desarrollo de la aplicación.
-
-Google Maps API
-Para mostrar mapas, marcadores y controlar la cámara.
-
-Geolocator
-Para obtener la ubicación actual del usuario y manejar permisos de localización.
-
-Dart
-Lenguaje utilizado en todo el proyecto.
-
-Qué demuestra este proyecto
-
-Integración de APIs externas en Flutter.
-
-Uso de mapas interactivos y geolocalización.
-
-Manejo de estado y comunicación entre widgets.
-
-Separación clara entre UI y lógica.
-
-Enfoque en experiencia de usuario y funcionalidad real.
-
-Posibles mejoras a futuro
-
-Búsqueda por distancia.
-
-Filtros avanzados.
-
-Guardar tiendas favoritas.
-
-Mostrar rutas desde la ubicación del usuario.
-
-Persistencia de datos con base de datos local o remota.
-
-Autor
-
-Pedro Cruz López
-Ingeniería en Computación
-
-Proyecto desarrollado como parte de mi portafolio personal y crecimiento como desarrollador.
+Proyecto desarrollado como parte de mi portafolio personal.
