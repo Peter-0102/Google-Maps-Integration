@@ -26,16 +26,31 @@ class _HomeScreenState extends State<HomeScreen> {
   final _horarioCtrl = TextEditingController();
   final _direccionCtrl = TextEditingController();
 
-  final List<Tienda> misTiendas = [
-    Tienda("Tienda A", 19.4326, -99.1332),
-    Tienda("Tienda B", 19.4400, -99.1400),
-    Tienda("Tienda C", 29.4400, -109.1400),
-    Tienda("Tienda D", 39.4400, -119.1400),
-    Tienda("Tienda E", 49.4400, -130.1400),
-    Tienda("Tienda F", 59.4400, -140.1400),
-    Tienda("Tienda G", 69.4400, -150.1400),
-    Tienda("Tienda H", 79.4400, -160.1400),
-  ];
+final List<Tienda> misTiendas = [
+  // --- ABARROTES Y COMIDA ---
+  Tienda("Abarrotes 'La Guadalupana'", 19.4326, -99.1332),
+  Tienda("Miscelánea 'El Recreo'", 19.4350, -99.1410),
+  Tienda("Frutas y Verduras 'Don Chucho'", 19.4410, -99.1290),
+  Tienda("Tortillería 'La Maizena'", 19.4380, -99.1250),
+  Tienda("Panadería 'La Flor de Trigo'", 19.4385, -99.1350),
+  Tienda("Carnicería 'La Selecta'", 19.4290, -99.1310),
+
+  // --- SERVICIOS Y SALUD ---
+  Tienda("Farmacia 'La Saludable'", 19.4250, -99.1380),
+  Tienda("Ferretería 'El Tornillo'", 19.4300, -99.1200),
+  Tienda("Papelería 'El Lápiz Loco'", 19.4310, -99.1450),
+  Tienda("Lavandería 'Burbujas'", 19.4360, -99.1480),
+  Tienda("Zapatería 'El Paso Firme'", 19.4335, -99.1375),
+  Tienda("Óptica 'Visión Clara'", 19.4285, -99.1420),
+
+  // --- REGALOS Y VARIOS ---
+  Tienda("Tienda de Regalos 'Detallitos'", 19.4270, -99.1280),
+  Tienda("Florería 'El Rosal'", 19.4340, -99.1220),
+  Tienda("Juguetería 'Mundo de Fantasía'", 19.4395, -99.1390),
+  Tienda("Mercería 'El Hilo de Oro'", 19.4315, -99.1265),
+  Tienda("Relojería 'El Tiempo Antiguo'", 19.4305, -99.1345),
+  Tienda("Librería 'Páginas Sueltas'", 19.4372, -99.1435),
+];
 
   //Modal para crear una nueva tienda:
   void mostrarModalCrearTienda() {
