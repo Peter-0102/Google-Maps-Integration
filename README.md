@@ -27,6 +27,12 @@ Por ejemplo, al buscar **"abarrotes"**, la app mostrará todas las tiendas relac
 - Posibilidad de centrar el mapa en la ubicación del usuario.
 - Base para implementar búsquedas por cercanía.
 
+### Agregar una nueva tienda
+- Botón flotante para agregar nuevas tiendas.
+- Apertura de un modal (dialog) para ingresar los datos de la tienda.
+- Campos como nombre, latitud, longitud, rating, horario y dirección.
+- Al guardar, la tienda se agrega a la lista y se muestra automáticamente en el mapa como un nuevo marcador.
+
 ### Marcadores dinámicos
 - Los marcadores se crean a partir de una lista de tiendas.
 - Se pueden agregar nuevas tiendas manualmente.
